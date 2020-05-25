@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>修改库存阈值</title>
+    <!-- Bootstrap core CSS -->
+    <link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!--引入抽取的topbar-->
+<!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
+<div th:replace="commons/bar::topbar"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!--引入侧边栏-->
+        <div th:replace="commons/bar::#sidebar(activeUri='list')"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <form th:action="@{/list/editSave}" onsubmit="return checkAllOfSeehin()" method="post">
+                <div class="form-group">
+                    <label>ID</label>
+                    <input name="id" type="text" class="form-control"  readonly="readonly" placeholder="ID" th:value="${listPojo.getId()}">
+                </div>
+                <div class="form-group">
+                    <label>库存编号</label>
+                    <input name="listNumber" type="text" class="form-control" readonly="readonly" th:value="${listPojo.getListNumber()}" >
+                </div>
+                <div class="form-group">
+                    <label>零件编号</label>
+                    <input name="pNumber" type="text" class="form-control" readonly="readonly" th:value="${listPojo.getPNumber()}">
+                </div>
+                <div class="form-group">
+                    <label>最大数量</label>
+                    <div>
+                        <span id="aaa"></span>
+                        <p style="color: red" th:text="${maxError}" th:if="${not #strings.isEmpty(maxError)}"></p>
+                    </div>
+                    <input name="pMax" id="max" type="text" class="form-control" placeholder="库存允许该零件的最大数量" th:value="${listPojo.getPMax()}" required="" autofocus="" onblur="test01()">
+                </div>
+                <div class="form-group">
+                    <label>临界值</label>
+                    <div>
+                        <span id="bbb"></span>
+                        <p style="color: red" th:text="${minError}" th:if="${not #strings.isEmpty(minError)}"></p>
+                    </div>
+                    <input name="pMin" id="min" type="text" class="form-control" placeholder="临界值" th:value="${listPojo.getPMin()}" required="" autofocus="" onblur="test02()">
+                </div>
+                <button type="submit" class="btn btn-primary">保存</button>
+            </form>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
+<script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
+<script>
+    feather.replace();
+
+    function test01() {
+        var num = document.getElementById("max").value;
+        var reg = /^[0-9]{1,5}$/;
+        if (num!==""&&!reg.test(num)){
+            document.getElementById("aaa").innerHTML = "请输入大于零的纯数字".fontcolor("red");
+        }
+        if (num===""||reg.test(num)){
+            document.getElementById("aaa").innerHTML = "";
+        }
+    }
+
+    function test02() {
+        var num = document.getElementById("min").value;
+        var reg = /^[0-9]{1,5}$/;
+        if (num!==""&&!reg.test(num)){
+            document.getElementById("bbb").innerHTML = "请输入大于零的纯数字".fontcolor("red");
+        }
+        if (num===""||reg.test(num)){
+            document.getElementById("bbb").innerHTML = "";
+        }
+    }
+
+    function checkAllOfSeehin() {
+        var max = parseInt(document.getElementById("max").value);
+        var min = parseInt(document.getElementById("min").value);
+        if (min>max||min===max){
+            alert("最大数量不能小于或等于临界值");
+            document.getElementById("aaa").innerHTML = "请重新输入比临界值大的纯数字".fontcolor("red");
+            document.getElementById("bbb").innerHTML = "请重新输入比最大数量小的纯数字".fontcolor("red");
+            document.getElementById("aaa").focus();
+            return false;
+        }
+        var msg = "确定提交修改？\n\n最大数量："+max+"\n临界值："+min+"\n请确认";
+        if (confirm(msg)==true){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
+
+</body>
+
+</html>

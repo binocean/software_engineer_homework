@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seehin.softwareclass.mapper.AffairMapper">
+
+    <insert id="newSave" parameterType="com.seehin.softwareclass.entity.AffairPojo">
+        insert into affair_table
+        (list_number,p_number,out_number,createtime,dispose)
+        values
+        (#{listNumber},#{pNumber},#{outNumber},#{createtime},#{dispose})
+    </insert>
+
+    <select id="getAll" resultType="com.seehin.softwareclass.entity.AffairPojo">
+        select * from affair_table order by createtime desc
+    </select>
+
+    <select id="getAllNotDisposeAffair" resultType="com.seehin.softwareclass.entity.AffairPojo">
+        select * from affair_table where dispose = 0;
+    </select>
+
+    <update id="updateDispose" parameterType="Integer">
+        update affair_table set
+        dispose = 1
+        where id = #{id}
+    </update>
+</mapper>

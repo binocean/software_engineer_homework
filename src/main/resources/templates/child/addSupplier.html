@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>供应商添加</title>
+    <!-- Bootstrap core CSS -->
+    <link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        .chartjs-render-monitor {
+            -webkit-animation: chartjs-render-animation 0.001s;
+            animation: chartjs-render-animation 0.001s;
+        }
+    </style>
+</head>
+
+<body>
+<!--引入抽取的topbar-->
+<!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
+<div th:replace="commons/bar::topbar"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!--引入侧边栏-->
+        <div th:replace="commons/bar::#sidebar(activeUri='supplier')"></div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <form th:action="@{/supplier/newSave}" onsubmit="return checkOfSeehin()" method="post">
+                <div class="form-group">
+                    <label>名称</label>
+                    <div>
+                        <span id="aaa" style=""></span>
+                        <p style="color: red" th:text="${supplierNameExist}" th:if="${not #strings.isEmpty(supplierNameExist)}"></p>
+                    </div>
+                    <input name="name" id="name" type="text" class="form-control" placeholder="供应商名称" required="" autofocus="" onblur="test01()">
+                </div>
+                <div class="form-group">
+                    <label>电话</label>
+                    <div>
+                        <span id="bbb" style=""></span>
+                    </div>
+                    <input name="phone" id="phone" type="text" class="form-control" placeholder="供应商手机号码" required="" autofocus="" onblur="test02()">
+                </div>
+                <div class="form-group">
+                    <label>地址</label>
+                    <div>
+                        <span id="ccc" style=""></span>
+                    </div>
+                    <input name="address" id="address" type="text" class="form-control" placeholder="供应商地址" required="" autofocus="" onblur="test03()">
+                </div>
+                <button type="submit" class="btn btn-primary">添加</button>
+            </form>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
+<script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
+<script>
+    feather.replace();
+
+    function test01() {
+        var num = document.getElementById("name").value;
+        var reg = /^[^……@\/'\\"#$%&\^*]+$/;
+        if (num!==""&&!reg.test(num)){
+            document.getElementById("aaa").innerHTML = "不可含有特殊字符".fontcolor("red");
+        }
+        if (num === ""||reg.test(num)){
+            document.getElementById("aaa").innerHTML = "";
+        }
+    }
+
+    function test02() {
+        var num = document.getElementById("phone").value;
+        var reg = /^1[35789]\d{9}$/;
+        if (num!==""&&!reg.test(num)){
+            document.getElementById("bbb").innerHTML = "请输入正确的电话号码".fontcolor("red");
+        }
+        if (num === ""||reg.test(num)){
+            document.getElementById("bbb").innerHTML = "";
+        }
+    }
+
+    function test03() {
+        var num = document.getElementById("address").value;
+        var reg = /^[^……@\/'\\"#$%&\^*]+$/;
+        if (num!==""&&!reg.test(num)){
+            document.getElementById("ccc").innerHTML = "不可含有特殊字符".fontcolor("red");
+        }
+        if (num === ""||reg.test(num)){
+            document.getElementById("ccc").innerHTML = "";
+        }
+    }
+    function name(str) {
+        var reg = /^[^……@\/'\\"#$%&\^*]+$/;
+        return reg.test(str);
+    }
+    function phone(str) {
+        var reg = /^1[35789]\d{9}$/;
+        return reg.test(str);
+    }
+    function address(str) {
+        var reg = /^[^……@\/'\\"#$%&\^*]+$/;
+        return reg.test(str);
+    }
+    function checkOfSeehin() {
+        if (!name(document.getElementById("name").value)){
+            alert("请填写正确的供应商名称");
+            document.getElementById("name").focus();
+            return false;
+        }
+        if (!phone(document.getElementById("phone").value)){
+            alert("请填写正确的联系电话");
+            document.getElementById("phone").focus();
+            return false;
+        }
+        if (!address(document.getElementById("address").value)){
+            alert("请填写正确的地址");
+            document.getElementById("address").focus();
+            return false;return false;
+        }
+        alert("是否添加该供应商\n名称："+document.getElementById("name").value+"\n电话："+document.getElementById("phone").value+"\n地址："+document.getElementById("address").value+"\n请确认！");
+        return true;
+    }
+</script>
+
+</body>
+
+</html>
