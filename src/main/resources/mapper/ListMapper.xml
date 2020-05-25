@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seehin.softwareclass.mapper.ListMapper">
+
+    <insert id="insertNewList" parameterType="com.seehin.softwareclass.entity.ListPojo">
+        insert into list_table
+        (list_number,p_number,p_quantity,p_max,p_min)
+        values
+        (#{listNumber},#{pNumber},#{pQuantity},#{pMax},#{pMin})
+    </insert>
+
+    <delete id="deleteListWhenPartDelete" parameterType="String">
+        delete from list_table where p_number = #{pNumber}
+    </delete>
+
+    <select id="selectAllListNumber" resultType="String">
+        select distinct list_number from list_table
+    </select>
+
+    <select id="selectQuantity" resultType="com.seehin.softwareclass.entity.ListPojo">
+        select p_quantity,p_min from list_table
+        where
+        list_number = #{listNumber}
+        and
+        p_number = #{pNumber}
+    </select>
+
+    <select id="getAllList" resultType="com.seehin.softwareclass.entity.ListPojo">
+        select * from list_table
+    </select>
+
+    <select id="getPQuantity" resultType="com.seehin.softwareclass.entity.ListPojo">
+        select * from list_table where list_number = #{listNumber} and p_number = #{pNumber};
+    </select>
+
+    <select id="getRequiredQuantity" resultType="com.seehin.softwareclass.vo.RequiredQuantityOfPartBeforeOutToExcelVo">
+        select p_number,p_max,p_quantity from list_table where p_number != p_max
+    </select>
+
+    <select id="getInfo" parameterType="int" resultType="com.seehin.softwareclass.entity.ListPojo">
+        select * from list_table where id = #{id}
+    </select>
+
+    <select id="getPQuantityById" parameterType="Integer" resultType="int">
+        select p_quantity from list_table where id = #{id}
+    </select>
+
+    <update id="updateQuantity">
+        update list_table set
+        p_quantity = #{pQuantity}
+        where
+        list_number = #{listNumber} and
+        p_number = #{pNumber}
+    </update>
+
+    <update id="updateDataAfterAutoInput">
+        update list_table set  p_quantity = p_max;
+    </update>
+
+    <update id="updateNumber">
+        update list_table set
+        p_max = #{max},
+        p_min = #{min}
+        where id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>仓库管理系统登录</title>
+		<!-- Bootstrap core CSS -->
+		<link href="/asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+		<!-- Custom styles for this template -->
+		<link href="/asserts/css/signin.css" th:href="@{/asserts/css/signin.css}" rel="stylesheet">
+	</head>
+	<body class="text-center">
+		<form class="form-signin" action="dashboard.html" th:action="@{/user/login}" method="post">
+			<img class="mb-4" th:src="@{/asserts/img/warehouse.svg}" src="/asserts/img/warehouse.svg" alt="" width="168" height="168">
+			<h1 class="h3 mb-3 font-weight-normal" style="color: #2177b8">仓库管理系统</h1>
+			<!--判断-->
+			<p style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+			<!--<label class="sr-only" th:text="#{login.username}">Username</label>-->
+			<input type="text" name="username" class="form-control" placeholder="Username"  required="" autofocus="">
+			<input type="password" style="margin-top: 10px;" name="password" class="form-control" placeholder="Password" required="">
+			<br />
+			<button class="btn btn-lg btn-primary btn-block" type="submit" >Sign in</button>
+			<p class="mt-5 mb-3 text-muted">© 2019-2020</p>
+		</form>
+	</body>
+
+</html>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seehin.softwareclass.mapper.SupplierMapper">
+
+    <insert id="addSupplier" parameterType="com.seehin.softwareclass.entity.SupplierPojo">
+        insert into supplier_table
+        (name,phone,address)
+        values
+        (#{name},#{phone},#{address})
+    </insert>
+
+    <delete id="deleteSupplier" parameterType="Integer">
+        delete  from supplier_table where id = #{id}
+    </delete>
+
+    <select id="getAllSupplier" resultType="com.seehin.softwareclass.entity.SupplierPojo">
+        select * from supplier_table
+    </select>
+
+    <select id="getOneSupplier" parameterType="Integer" resultType="com.seehin.softwareclass.entity.SupplierPojo">
+        select * from supplier_table
+        where
+        id = #{id}
+    </select>
+
+    <select id="getAllPhoneOfSupplier" resultType="java.util.HashMap">
+        select id,phone from supplier_table
+    </select>
+
+    <select id="getCountOfName" parameterType="String" resultType="int">
+        select count(*) from supplier_table where name = #{name}
+    </select>
+
+    <update id="editSupplier" parameterType="com.seehin.softwareclass.entity.SupplierPojo">
+        update supplier_table
+        set
+        name = #{name},
+        phone = #{phone},
+        address = #{address}
+        where
+        id = #{id}
+    </update>
+</mapper>

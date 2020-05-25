@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seehin.softwareclass.mapper.PartMapper">
+
+    <insert id="newSave" parameterType="com.seehin.softwareclass.entity.PartPojo">
+        insert into part_table
+        (p_number,p_name,p_price,main_supplier,minor_supplier)
+        values
+        (#{pNumber},#{pName},#{pPrice},#{mainSupplier},#{minorSupplier})
+    </insert>
+
+    <delete id="deletePart" parameterType="Integer" >
+        delete from part_table
+        where
+        id = #{id}
+    </delete>
+
+    <select id="getAllPart" resultType="com.seehin.softwareclass.entity.PartPojo">
+        select * from part_table order by id desc
+    </select>
+
+    <select id="getOnePart" parameterType="Integer" resultType="com.seehin.softwareclass.entity.PartPojo">
+        select * from part_table
+        where
+        id = #{id}
+    </select>
+
+    <select id="getOnePartByPNumber" parameterType="String" resultType="com.seehin.softwareclass.entity.PartPojo">
+        select * from part_table where p_number = #{pNumber};
+    </select>
+
+    <select id="getPNumberById" parameterType="Integer" resultType="String">
+        select p_number from part_table where id = #{id}
+    </select>
+
+    <select id="getAllPNumber" parameterType="String" resultType="String">
+        select p_number from part_table where p_number like "%"#{content}"%"
+    </select>
+
+    <select id="getCountOfPNumber" parameterType="String" resultType="int">
+        select count(*) from part_table where p_number = #{pNumber}
+    </select>
+
+    <update id="editSave" parameterType="com.seehin.softwareclass.entity.PartPojo">
+        update part_table
+        set
+        p_number = #{pNumber},
+        p_name = #{pName},
+        p_price = #{pPrice},
+        main_Supplier = #{mainSupplier},
+        minor_Supplier = #{minorSupplier}
+        where
+        id = #{id}
+    </update>
+</mapper>

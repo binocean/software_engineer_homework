@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.seehin.softwareclass.mapper.OrderMapper">
+
+    <insert id="insertNewOrder" parameterType="com.seehin.softwareclass.entity.OrderPojo">
+        insert into order_table
+        (p_number,p_name,main_supplier,minor_supplier,in_number,createtime)
+        values
+        (#{pNumber},#{pName},#{mainSupplier},#{minorSupplier},#{inNumber},#{createtime})
+    </insert>
+
+    <select id="getAllOrder" resultType="com.seehin.softwareclass.entity.OrderPojo">
+        select * from order_table order by p_number asc
+    </select>
+
+    <select id="pNumberExistOrNot" parameterType="String" resultType="int">
+        select count(*) from order_table where p_number = #{pNumber}
+    </select>
+
+    <select id="getNowInNumber" parameterType="String" resultType="int">
+        select in_number from order_table where p_number = #{pNumber}
+    </select>
+
+    <select id="getAllToExcel" resultType="com.seehin.softwareclass.entity.ExcelOfOrder">
+        select * from order_table order by p_number asc
+    </select>
+
+    <update id="updateInNumber">
+        update order_table set
+        in_number = #{inNumber},
+        createtime = #{createtime}
+        where p_number = #{pNumber}
+    </update>
+
+    <update id="truncateTable">
+        truncate table order_table
+    </update>
+</mapper>

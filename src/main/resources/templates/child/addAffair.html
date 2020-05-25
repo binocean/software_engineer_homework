@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>零件添加</title>
+    <!-- Bootstrap core CSS -->
+    <link href="asserts/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.0.0/css/bootstrap.css}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="asserts/css/dashboard.css" th:href="@{/asserts/css/dashboard.css}" rel="stylesheet">
+    <style type="text/css">
+        /* Chart.js */
+
+        @-webkit-keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes chartjs-render-animation {
+            from {
+                opacity: 0.99
+            }
+            to {
+                opacity: 1
+            }
+        }
+    </style>
+</head>
+
+<body>
+<!--引入抽取的topbar-->
+<!--模板名：会使用thymeleaf的前后缀配置规则进行解析-->
+<div th:replace="commons/bar::topbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <!--引入侧边栏-->
+        <div th:replace="commons/bar::#sidebar(activeUri='affair')"></div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="alert alert-warning" th:if="${not #strings.isEmpty(maxOut)}">
+                <a href="#" class="close" data-dismiss="alert">
+                    &times;
+                </a>
+                <a style="color: red">
+                    <strong th:text="'库存不足！零件('+${partNumber}+')仅剩下'+${maxOut}+'件'"></strong>
+                </a>
+            </div>
+            <form th:action="@{/affair/newSave}" method="post" onsubmit="return checkBySeehin()">
+                <div class="form-group">
+                    <label>库存编号</label>
+                    <select class="form-control" name="listNumber" required="" autofocus="">
+                        <option th:selected="${usedListNumber}?${usedListNumber == list}" th:value="${list}" th:each="list:${lists}" th:text="${list}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>零件编号</label>
+                    <select class="form-control" name="pNumber" required="" autofocus="">
+                        <option th:selected="${usedPNumber}?${usedPNumber==part.getPNumber()}" th:value="${part.getPNumber()}" th:each="part:${parts}" th:text="${part.getPNumber()}+'   ('+${part.getPName()}+')'"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>零件数量</label>
+                    <div>
+                        <span id="aaa"></span>
+                    </div>
+                    <!--<p style="color: red" th:text="'库存不足，'+${partNumber}+'零件仅剩下'+${maxOut}+'件'" th:if="${not #strings.isEmpty(maxOut)}"></p>-->
+                    <input id="quantity" name="outNumber" type="text" class="form-control" placeholder="零件出库数量" required="" autofocus="" onblur="test()">
+                </div>
+                <button type="submit" class="btn btn-primary">添加</button>
+            </form>
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="asserts/js/jquery-3.2.1.slim.min.js" th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+<script type="text/javascript" src="asserts/js/popper.min.js" th:src="@{/webjars/popper.js/1.11.1/dist/popper.js}"></script>
+<script type="text/javascript" src="asserts/js/bootstrap.min.js" th:src="@{/webjars/bootstrap/4.0.0/js/bootstrap.js}"></script>
+
+<!-- Icons -->
+<script type="text/javascript" src="asserts/js/feather.min.js" th:src="@{/asserts/js/feather.min.js}"></script>
+<script>
+    feather.replace();
+
+    function test() {
+        var num = document.getElementById("quantity").value;
+        var reg = /^[0-9]{1,4}$/;
+        if (num!==""&&!reg.test(num)){
+            document.getElementById("aaa").innerHTML = "请输入纯数字".fontcolor("red");
+            document.getElementById("quantity").focus();
+        }
+        if (num===""||reg.test(num)){
+            document.getElementById("aaa").innerHTML="";
+        }
+    }
+    function quantityOfTrue(str) {
+        var reg = /^[0-9]{1,4}$/;
+        return reg.test(str);
+    }
+    function checkBySeehin() {
+        var num = quantityOfTrue(document.getElementById("quantity").value);
+        if (!num){
+            alert("输入的零件数量出错！");
+            return false;
+        }
+        return true;
+    }
+</script>
+
+</body>
+
+</html>
