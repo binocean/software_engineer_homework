@@ -19,7 +19,7 @@
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
         <!--适配版本-->
         <thymeleaf-layout-dialect.version>2.4.1</thymeleaf-layout-dialect.version>
-        <quartz.version>2.3.0</quartz.version>
+        <quartz.version>2.3.2</quartz.version>
     </properties>
     <dependencies>
         <!--jdbc连接-->
